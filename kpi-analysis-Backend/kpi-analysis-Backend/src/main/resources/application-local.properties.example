@@ -1,0 +1,9 @@
+# Example local configuration file
+# Copy this file to application-local.properties and add your Groq API key
+# This file is not versioned (in .gitignore)
+
+# Groq AI Configuration
+groq.api.key=your-groq-api-key-here
+groq.api.url=https://api.groq.com/openai/v1/chat/completions
+groq.model=llama-3.1-70b-versatile
+

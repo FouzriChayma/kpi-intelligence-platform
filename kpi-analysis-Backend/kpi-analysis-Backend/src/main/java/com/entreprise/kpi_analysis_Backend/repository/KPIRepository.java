@@ -11,4 +11,5 @@ import java.util.List;
 public interface KPIRepository extends JpaRepository<KPI, Long> {
     List<KPI> findByEmployeeId(Long employeeId);
     List<KPI> findByEmployeeIdAndPeriodStartBetween(Long employeeId, LocalDate start, LocalDate end);
+    List<KPI> findByPeriodStartAndPeriodEnd(LocalDate periodStart, LocalDate periodEnd);
 }
