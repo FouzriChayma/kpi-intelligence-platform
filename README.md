@@ -282,7 +282,9 @@ L'URL reste toujours `localhost:4200` grâce à `skipLocationChange: true`.
 
 ## 👥 Auteur
 
-Développé dans le cadre d'un projet académique/professionnel.
+**Chaima Fouzri**
+
+Ce projet a été développé dans le cadre d'une pratique personnelle et d'auto-apprentissage pour améliorer mes compétences en développement full-stack avec Spring Boot et Angular.
 
 ## 📄 Licence
 
