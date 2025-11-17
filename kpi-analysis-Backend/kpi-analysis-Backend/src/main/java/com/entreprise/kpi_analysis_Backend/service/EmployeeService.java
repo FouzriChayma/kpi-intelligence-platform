@@ -4,6 +4,8 @@ import com.entreprise.kpi_analysis_Backend.dto.EmployeeDTO;
 import com.entreprise.kpi_analysis_Backend.entity.Employee;
 import com.entreprise.kpi_analysis_Backend.exception.ResourceNotFoundException;
 import com.entreprise.kpi_analysis_Backend.repository.EmployeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,10 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service for Employee business logic
+ */
 @Service
 @Transactional
 public class EmployeeService {
     
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     
     @Autowired
@@ -22,25 +28,32 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
     
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllEmployees() {
+        logger.debug("Fetching all employees from repository");
         return employeeRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
+    @Transactional(readOnly = true)
     public EmployeeDTO getEmployeeById(Long id) {
+        logger.debug("Fetching employee with ID: {}", id);
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee", id));
         return convertToDTO(employee);
     }
     
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        logger.debug("Creating new employee: {}", employeeDTO.getEmail());
         Employee employee = convertToEntity(employeeDTO);
         Employee savedEmployee = employeeRepository.save(employee);
+        logger.info("Employee created successfully with ID: {}", savedEmployee.getId());
         return convertToDTO(savedEmployee);
     }
     
     public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
+        logger.debug("Updating employee with ID: {}", id);
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee", id));
         
@@ -52,14 +65,17 @@ public class EmployeeService {
         employee.setPosition(employeeDTO.getPosition());
         
         Employee updatedEmployee = employeeRepository.save(employee);
+        logger.info("Employee updated successfully with ID: {}", id);
         return convertToDTO(updatedEmployee);
     }
     
     public void deleteEmployee(Long id) {
+        logger.debug("Deleting employee with ID: {}", id);
         if (!employeeRepository.existsById(id)) {
             throw new ResourceNotFoundException("Employee", id);
         }
         employeeRepository.deleteById(id);
+        logger.info("Employee deleted successfully with ID: {}", id);
     }
     
     // Helper methods for conversion
